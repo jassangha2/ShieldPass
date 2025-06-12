@@ -2,28 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShieldPass</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #f0f4f8;
+      background-color: #f0f4f8;
+      margin: 0;
       color: #222;
       transition: background 0.3s, color 0.3s;
-      text-align: center;
     }
 
     header {
-      background: #b3d9ff;
-      color: #000;
-      padding: 20px 40px;
+      background-color: #b3d9ff;
+      padding: 15px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -33,57 +31,50 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .logo {
-      font-size: 2.5rem;
-      font-weight: bold;
+    .nav-left {
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
 
-    nav a {
-      margin-left: 20px;
-      font-weight: 600;
-      font-size: 1rem;
-      color: #000;
+    .nav-left a {
       text-decoration: none;
+      color: #000;
+      font-weight: 600;
     }
 
-    nav a:hover {
+    .nav-left a:hover {
       text-decoration: underline;
     }
 
-    #mode-toggle {
-      font-size: 1rem;
-      padding: 5px 15px;
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      flex: 1;
+    }
+
+    .mode-toggle {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      border: 1px solid #000;
       background: transparent;
-      border: 2px solid #000;
-      border-radius: 5px;
+      border-radius: 4px;
       cursor: pointer;
     }
 
-    main {
-      background: white;
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    main, section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      text-align: center;
     }
 
-    main h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-size: 1rem;
-      color: #444;
-      margin-bottom: 30px;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      font-weight: 600;
-      margin-bottom: 8px;
+    h1, h2 {
+      margin-top: 0;
     }
 
     .password-wrapper {
@@ -92,13 +83,12 @@
       align-items: center;
     }
 
-    input[type="password"],
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 12px 15px;
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
       font-size: 1rem;
-      border: 2px solid #ccc;
       border-radius: 8px;
+      border: 2px solid #ccc;
       margin-bottom: 15px;
     }
 
@@ -106,19 +96,17 @@
       position: absolute;
       right: 15px;
       cursor: pointer;
-      font-size: 1.2rem;
-      color: #555;
+      color: #777;
     }
 
     button {
-      width: 100%;
       padding: 12px;
       font-size: 1rem;
-      font-weight: bold;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      margin: 10px 0;
+      width: 100%;
+      margin-bottom: 10px;
     }
 
     #check-btn {
@@ -136,174 +124,180 @@
       color: white;
     }
 
-    .feedback {
-      font-weight: 600;
+    #result {
       margin-top: 10px;
-      min-height: 20px;
+      font-weight: 600;
     }
 
-    .feedback.strong {
-      color: #28a745;
-    }
-
-    .feedback.weak {
-      color: #d63031;
-    }
-
-    section#about {
-      max-width: 700px;
-      margin: 50px auto;
-      font-size: 1rem;
-      color: #333;
-      line-height: 1.6;
+    #about-page {
       display: none;
+      text-align: left;
     }
 
-    section#about.active {
+    .feature-grid, .steps-grid, .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature, .step, .testimonial {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .feature i, .step i {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
       display: block;
     }
 
-    body.dark-mode {
+    .testimonial {
+      font-style: italic;
+    }
+
+    .dark-mode {
       background: #1c1c1c;
       color: #eee;
     }
 
-    body.dark-mode header {
+    .dark-mode header {
       background: #004080;
       color: white;
     }
 
-    body.dark-mode nav a,
-    body.dark-mode #mode-toggle {
-      color: white;
-      border-color: white;
-    }
-
-    body.dark-mode main {
+    .dark-mode main, .dark-mode section {
       background: #333;
       color: white;
     }
 
-    body.dark-mode input {
+    .dark-mode input {
       background: #444;
-      color: white;
       border-color: #666;
+      color: white;
     }
 
-    body.dark-mode button {
-      border: none;
+    .dark-mode .feature, .dark-mode .step, .dark-mode .testimonial {
+      background: #444;
     }
-
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">🛡️ ShieldPass</div>
-    <nav>
+    <div class="nav-left">
       <a href="#" onclick="showHome()">Home</a>
       <a href="#" onclick="showAbout()">About</a>
-    </nav>
-    <button id="mode-toggle">Dark Mode</button>
+    </div>
+    <div class="logo">🛡️ ShieldPass</div>
+    <button class="mode-toggle" onclick="toggleMode()" id="mode-toggle">Dark Mode</button>
   </header>
 
   <main id="main-section">
     <h1>Check your password strength</h1>
-    <p class="tagline">ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
+    <p>ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
 
     <label for="password-input">Enter your password:</label>
     <div class="password-wrapper">
-      <input type="password" id="password-input" placeholder="••••••••••••••">
-      <i class="fas fa-eye eye-icon" id="toggle-eye"></i>
+      <input type="password" id="password-input" placeholder="••••••••••••••" />
+      <i class="fas fa-eye eye-icon" id="toggle-eye" onclick="toggleEye()"></i>
     </div>
 
     <button id="check-btn">Check</button>
     <button id="generate-btn">Generate Strong Password</button>
     <button id="copy-btn">📋 Copy</button>
 
-    <div id="result" class="feedback"></div>
+    <div id="result"></div>
   </main>
 
-  <section id="about">
-    <h2>ShieldPass</h2>
-    <p>ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
+  <section id="about-page">
+    <h2>Your Digital Vault, Reinvented</h2>
+    <p><strong>ShieldPass</strong> securely stores, manages, and shares your sensitive data with privacy and ease.</p>
+    <button onclick="showHome()">← Back to Home</button>
+
+    <h2>What is ShieldPass?</h2>
+    <p>ShieldPass is a modern password manager designed to give individuals and teams a safer, smarter way to handle their sensitive information. From passwords and passkeys to credit card data, ShieldPass provides a secure and intuitive solution for managing your digital life.</p>
+
+    <h2>Why Choose ShieldPass</h2>
+    <div class="feature-grid">
+      <div class="feature"><i class="fas fa-lock"></i><strong>Military-Grade Encryption</strong><br>Your data is encrypted before it leaves your device.</div>
+      <div class="feature"><i class="fas fa-sync"></i><strong>Cross-Device Access</strong><br>Securely access your vault on mobile, desktop, or browser.</div>
+      <div class="feature"><i class="fas fa-key"></i><strong>Password Generator</strong><br>Create strong, unique passwords in a single tap.</div>
+      <div class="feature"><i class="fas fa-share-alt"></i><strong>Private Sharing</strong><br>Share credentials without exposing the password.</div>
+    </div>
+
+    <h2>How It Works</h2>
+    <div class="steps-grid">
+      <div class="step"><i class="fas fa-database"></i><strong>Store</strong><br>Add passwords, passkeys, and payment info securely.</div>
+      <div class="step"><i class="fas fa-cogs"></i><strong>Manage</strong><br>Organise and edit entries across your devices.</div>
+      <div class="step"><i class="fas fa-users"></i><strong>Share</strong><br>Securely share access with people you trust.</div>
+    </div>
+
+    <h2>Privacy You Can Count On</h2>
+    <p>ShieldPass uses zero-knowledge architecture, which means only you can access your data — not even we can see it. Your security and privacy are our top priorities.</p>
+
+    <h2>What Users Are Saying</h2>
+    <div class="testimonials">
+      <div class="testimonial">“I finally feel secure online.”</div>
+      <div class="testimonial">“Sharing logins with my team has never been easier.”</div>
+      <div class="testimonial">“Love the clean interface and password suggestions.”</div>
+    </div>
+
+    <h2>Ready to Take Control of Your Digital Security?</h2>
+    <p>Join thousands of users who trust ShieldPass every day.</p>
+    <button onclick="showHome()">Get Started for Free</button>
   </section>
 
   <script>
-    const passwordInput = document.getElementById("password-input");
-    const result = document.getElementById("result");
-    const checkBtn = document.getElementById("check-btn");
-    const generateBtn = document.getElementById("generate-btn");
-    const copyBtn = document.getElementById("copy-btn");
-    const eyeIcon = document.getElementById("toggle-eye");
-    const modeToggle = document.getElementById("mode-toggle");
-    const mainSection = document.getElementById("main-section");
-    const aboutSection = document.getElementById("about");
-
-    function isStrongPassword(pwd) {
-      return pwd.length >= 8 &&
-             /[A-Z]/.test(pwd) &&
-             /[a-z]/.test(pwd) &&
-             /[0-9]/.test(pwd) &&
-             /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+    function toggleEye() {
+      const pw = document.getElementById("password-input");
+      pw.type = pw.type === "password" ? "text" : "password";
     }
 
-    checkBtn.onclick = () => {
-      const pwd = passwordInput.value;
-      if (!pwd) {
-        result.textContent = "Please enter a password.";
-        result.className = "feedback weak";
-        return;
-      }
-      if (isStrongPassword(pwd)) {
-        result.textContent = "✅ Strong password!";
-        result.className = "feedback strong";
-      } else {
-        result.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
-        result.className = "feedback weak";
-      }
-    };
-
-    generateBtn.onclick = () => {
-      const length = 14;
-      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:\"<>?|[];',./`~";
-      let newPwd = "";
-      for (let i = 0; i < length; i++) {
-        newPwd += charset.charAt(Math.floor(Math.random() * charset.length));
-      }
-      passwordInput.type = "text";
-      passwordInput.value = newPwd;
-      eyeIcon.className = "fas fa-eye-slash eye-icon";
-      result.textContent = "Generated a strong password!";
-      result.className = "feedback strong";
-    };
-
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(passwordInput.value).then(() => {
-        result.textContent = "Copied to clipboard!";
-        result.className = "feedback strong";
-      });
-    };
-
-    eyeIcon.onclick = () => {
-      const isPwd = passwordInput.type === "password";
-      passwordInput.type = isPwd ? "text" : "password";
-      eyeIcon.className = isPwd ? "fas fa-eye-slash eye-icon" : "fas fa-eye eye-icon";
-    };
-
-    modeToggle.onclick = () => {
+    function toggleMode() {
       document.body.classList.toggle("dark-mode");
-      modeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
-    };
+      const btn = document.getElementById("mode-toggle");
+      btn.innerText = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
+    }
 
     function showAbout() {
-      mainSection.style.display = "none";
-      aboutSection.classList.add("active");
+      document.getElementById("main-section").style.display = "none";
+      document.getElementById("about-page").style.display = "block";
     }
 
     function showHome() {
-      mainSection.style.display = "block";
-      aboutSection.classList.remove("active");
+      document.getElementById("main-section").style.display = "block";
+      document.getElementById("about-page").style.display = "none";
     }
+
+    document.getElementById("generate-btn").addEventListener("click", () => {
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
+      let password = "";
+      for (let i = 0; i < 12; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      document.getElementById("password-input").value = password;
+    });
+
+    document.getElementById("copy-btn").addEventListener("click", () => {
+      const input = document.getElementById("password-input");
+      input.select();
+      input.setSelectionRange(0, 99999); // mobile
+      document.execCommand("copy");
+      alert("Password copied to clipboard!");
+    });
+
+    document.getElementById("check-btn").addEventListener("click", () => {
+      const pw = document.getElementById("password-input").value;
+      const result = document.getElementById("result");
+      if (pw.length >= 12 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /\d/.test(pw) && /[\W_]/.test(pw)) {
+        result.innerText = "Strong password ✅";
+        result.style.color = "#28a745";
+      } else {
+        result.innerText = "Weak password ❌";
+        result.style.color = "#d63031";
+      }
+    });
   </script>
 </body>
 </html>
