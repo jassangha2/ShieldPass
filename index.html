@@ -2,162 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ShieldPass</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f4f8;
-      color: #333;
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      text-align: center;
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
     }
-    .logo {
-      font-size: 60px;
-      margin-bottom: 10px;
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f4f6f8;
+      color: #222;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header / Navbar */
+    header {
+      background: #0052cc;
+      color: white;
+      padding: 10px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    }
+
+    header .logo {
+      font-size: 1.7rem;
+      user-select: none;
+      display: flex;
+      align-items: center;
+    }
+
+    header .logo img {
+      height: 32px;
+      margin-right: 10px;
       user-select: none;
     }
-    h1 {
-      margin: 0;
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #dark-mode-toggle {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s;
+    }
+
+    /* Main container */
+    main {
+      max-width: 450px;
+      margin: 60px auto 40px auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+      text-align: center;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    main h1 {
+      margin-bottom: 20px;
       font-weight: 700;
       font-size: 2.2rem;
-      color: #004d99;
-    }
-    p.subtitle {
-      font-size: 1rem;
-      color: #555;
-      margin-bottom: 30px;
-    }
-    input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      border: 2px solid #ddd;
-      border-radius: 6px;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-    input[type="password"]:focus {
-      border-color: #004d99;
-      box-shadow: 0 0 5px #004d99;
-    }
-    button {
-      margin-top: 15px;
-      padding: 12px 25px;
-      font-size: 1rem;
-      background-color: #004d99;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
       user-select: none;
     }
-    button:hover {
-      background-color: #003366;
-    }
-    #feedback {
-      margin-top: 25px;
+
+    main label {
+      display: block;
       font-weight: 600;
-      font-size: 1.1rem;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      text-align: left;
     }
-    .strong {
-      color: #28a745; /* green */
-    }
-    .weak {
-      color: #dc3545; /* red */
-    }
-    /* Password strength meter */
-    #strengthBar {
+
+    main input[type="password"] {
       width: 100%;
-      height: 10px;
-      background: #ddd;
-      border-radius: 6px;
-      margin-top: 15px;
-      overflow: hidden;
-    }
-    #strengthBar > div {
-      height: 100%;
-      width: 0%;
-      background: #dc3545;
-      transition: width 0.3s ease, background-color 0.3s ease;
-      border-radius: 6px;
-    }
-  </style>
-</head>
-<body>
-  <div class="logo">🛡️</div>
-  <h1>ShieldPass</h1>
-  <p class="subtitle">Check your password strength</p>
-  
-  <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="off" />
-  <div id="strengthBar"><div></div></div>
-  <button onclick="checkPassword()">Check</button>
-  <div id="feedback"></div>
-
-  <script>
-    const passwordInput = document.getElementById('passwordInput');
-    const feedback = document.getElementById('feedback');
-    const strengthBar = document.getElementById('strengthBar').firstElementChild;
-
-    function calculateStrength(pwd) {
-      let strength = 0;
-      if(pwd.length >= 8) strength += 1;
-      if(/[A-Z]/.test(pwd)) strength += 1;
-      if(/[a-z]/.test(pwd)) strength += 1;
-      if(/\d/.test(pwd)) strength += 1;
-      if(/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) strength += 1;
-      return strength;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+      margin-bottom: 20px;
     }
 
-    function updateStrengthBar(strength) {
-      const percent = (strength / 5) * 100;
-      strengthBar.style.width = percent + '%';
-
-      // Change color based on strength
-      if (strength <= 2) {
-        strengthBar.style.backgroundColor = '#dc3545'; // red
-      } else if (strength === 3 || strength === 4) {
-        strengthBar.style.backgroundColor = '#ffc107'; // yellow
-      } else if (strength === 5) {
-        strengthBar.style.backgroundColor = '#28a745'; // green
-      }
+    main input[type="password"]:focus {
+      outline: none;
+      border-color: #0052cc;
+      box-shadow: 0 0 5px #0052ccaa;
     }
 
-    function checkPassword() {
-      const pwd = passwordInput.value;
-      const strength = calculateStrength(pwd);
-      updateStrengthBar(strength);
-
-      if (strength === 5) {
-        feedback.textContent = "✅ Your password is strong.";
-        feedback.className = "strong";
-      } else {
-        feedback.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
-        feedback.className = "weak";
-      }
+    main button {
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #0052cc;
+      color: white;
+      margin-bottom: 10px;
+      width: 100%;
+      transition: background 0.3s;
+      user-select: none;
     }
 
-    // Update feedback in real-time as user types
-    passwordInput.addEventListener('input', () => {
-      const pwd = passwordInput.value;
-      const strength = calculateStrength(pwd);
-      updateStrengthBar(strength);
+    main button:hover {
+      background: #0073ff;
+    }
 
-      if (pwd.length === 0) {
-        feedback.textContent = '';
-        strengthBar.style.width = '0%';
-      } else if (strength === 5) {
-        feedback.textContent = "✅ Your password is strong.";
-        feedback.className = "strong";
-      } else {
-        feedback.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
-        feedback.className = "weak";
-      }
-    });
-  </script>
-</body>
-</html>
+    #generate-btn {
+      background: #28a745;
+    }
+
+    #generate-btn:hover {
+      background: #2ecc40;
+    }
+
+    /* Feedback message */
+    .feedback {
+      font-weight: 60
