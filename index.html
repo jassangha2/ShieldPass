@@ -1,64 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>ShieldPass</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 400px;
-    margin: 50px auto;
-    text-align: center;
-  }
-  input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.1em;
-  }
-  button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-  }
-  #feedback {
-    margin-top: 20px;
-    font-weight: bold;
-  }
-  .strong {
-    color: green;
-  }
-  .weak {
-    color: red;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>ShieldPass</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .logo {
+      font-size: 60px;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+    h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: #004d99;
+    }
+    p.subtitle {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    input[type="password"]:focus {
+      border-color: #004d99;
+      box-shadow: 0 0 5px #004d99;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      background-color: #004d99;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #003366;
+    }
+    #feedback {
+      margin-top: 25px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .strong {
+      color: #28a745; /* green */
+    }
+    .weak {
+      color: #dc3545; /* red */
+    }
+    /* Password strength meter */
+    #strengthBar {
+      width: 100%;
+      height: 10px;
+      background: #ddd;
+      border-radius: 6px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+    #strengthBar > div {
+      height: 100%;
+      width: 0%;
+      background: #dc3545;
+      transition: width 0.3s ease, background-color 0.3s ease;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
+  <div class="logo">🛡️</div>
   <h1>ShieldPass</h1>
-  <p>Check your password strength:</p>
-  <input type="password" id="passwordInput" placeholder="Enter password" />
+  <p class="subtitle">Check your password strength</p>
+  
+  <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="off" />
+  <div id="strengthBar"><div></div></div>
   <button onclick="checkPassword()">Check</button>
   <div id="feedback"></div>
 
   <script>
+    const passwordInput = document.getElementById('passwordInput');
+    const feedback = document.getElementById('feedback');
+    const strengthBar = document.getElementById('strengthBar').firstElementChild;
+
+    function calculateStrength(pwd) {
+      let strength = 0;
+      if(pwd.length >= 8) strength += 1;
+      if(/[A-Z]/.test(pwd)) strength += 1;
+      if(/[a-z]/.test(pwd)) strength += 1;
+      if(/\d/.test(pwd)) strength += 1;
+      if(/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) strength += 1;
+      return strength;
+    }
+
+    function updateStrengthBar(strength) {
+      const percent = (strength / 5) * 100;
+      strengthBar.style.width = percent + '%';
+
+      // Change color based on strength
+      if (strength <= 2) {
+        strengthBar.style.backgroundColor = '#dc3545'; // red
+      } else if (strength === 3 || strength === 4) {
+        strengthBar.style.backgroundColor = '#ffc107'; // yellow
+      } else if (strength === 5) {
+        strengthBar.style.backgroundColor = '#28a745'; // green
+      }
+    }
+
     function checkPassword() {
-      const pwd = document.getElementById('passwordInput').value;
-      const feedback = document.getElementById('feedback');
-      
-      const lengthCheck = pwd.length >= 8;
-      const upperCheck = /[A-Z]/.test(pwd);
-      const lowerCheck = /[a-z]/.test(pwd);
-      const digitCheck = /\d/.test(pwd);
-      const symbolCheck = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
-      
-      if(lengthCheck && upperCheck && lowerCheck && digitCheck && symbolCheck){
+      const pwd = passwordInput.value;
+      const strength = calculateStrength(pwd);
+      updateStrengthBar(strength);
+
+      if (strength === 5) {
         feedback.textContent = "✅ Your password is strong.";
         feedback.className = "strong";
       } else {
-        feedback.textContent = "❌ Weak password! Use at least 8 chars, uppercase, lowercase, digits, and symbols.";
+        feedback.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
         feedback.className = "weak";
       }
     }
+
+    // Update feedback in real-time as user types
+    passwordInput.addEventListener('input', () => {
+      const pwd = passwordInput.value;
+      const strength = calculateStrength(pwd);
+      updateStrengthBar(strength);
+
+      if (pwd.length === 0) {
+        feedback.textContent = '';
+        strengthBar.style.width = '0%';
+      } else if (strength === 5) {
+        feedback.textContent = "✅ Your password is strong.";
+        feedback.className = "strong";
+      } else {
+        feedback.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
+        feedback.className = "weak";
+      }
+    });
   </script>
 </body>
 </html>
