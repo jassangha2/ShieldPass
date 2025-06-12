@@ -6,139 +6,68 @@
   <title>ShieldPass</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      background: #f4f6f8;
-      color: #222;
-      transition: background 0.3s, color 0.3s;
-    }
+    /* Your existing CSS here, unchanged */
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🛡️ ShieldPass</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+    </nav>
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+  </header>
 
-    /* Header / Navbar */
-    header {
-      background: #0052cc;
-      color: white;
-      padding: 10px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 700;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
-    }
+  <main>
+    <h1>Check your password strength</h1>
+    <label for="password-input">Enter your password:</label>
+    <input type="password" id="password-input" placeholder="••••••••••••••" autocomplete="off" />
+    <button id="check-btn">Check</button>
+    <button id="generate-btn">Generate Strong Password</button>
+    <div id="result" class="feedback"></div>
+  </main>
 
-    header .logo {
-      font-size: 1.7rem;
-      user-select: none;
-      display: flex;
-      align-items: center;
-    }
+  <section id="about">
+    <h2>About ShieldPass</h2>
+    <p>ShieldPass checks your password strength and helps keep your accounts secure. We do <strong>NOT</strong> store or send your password anywhere — all checking happens locally in your browser, ensuring your privacy.</p>
+    <p>Check your passwords safely and improve your security habits!</p>
+  </section>
 
-    header .logo img {
-      height: 32px;
-      margin-right: 10px;
-      user-select: none;
-    }
+  <script>
+    try {
+      // Password strength function
+      function isStrongPassword(password) {
+        const lengthError = password.length < 8;
+        const digitError = !/\d/.test(password);
+        const uppercaseError = !/[A-Z]/.test(password);
+        const lowercaseError = !/[a-z]/.test(password);
+        const symbolError = !/[!@#$%^&*(),.?":{}|<>]/.test(password);
+        return !(lengthError || digitError || uppercaseError || lowercaseError || symbolError);
+      }
 
-    nav a {
-      color: white;
-      margin-left: 20px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-    }
+      // Elements
+      const input = document.getElementById("password-input");
+      const checkBtn = document.getElementById("check-btn");
+      const result = document.getElementById("result");
+      const darkModeToggle = document.getElementById("dark-mode-toggle");
+      const generateBtn = document.getElementById("generate-btn");
 
-    nav a:hover {
-      text-decoration: underline;
-    }
+      // Check button event
+      checkBtn.onclick = () => {
+        const pwd = input.value;
+        if (!pwd) {
+          result.textContent = "Please enter a password.";
+          result.className = "feedback weak";
+          return;
+        }
+        if (isStrongPassword(pwd)) {
+          result.textContent = "✅ Strong password!";
+          result.className = "feedback strong";
+        } else {
+          result.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
+          result.className = "feedback weak";
+        }
+      };
 
-    #dark-mode-toggle {
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.3s;
-    }
-
-    /* Main container */
-    main {
-      max-width: 450px;
-      margin: 60px auto 40px auto;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
-      text-align: center;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-
-    main h1 {
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 2.2rem;
-      user-select: none;
-    }
-
-    main label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 10px;
-      font-size: 1rem;
-      text-align: left;
-    }
-
-    main input[type="password"] {
-      width: 100%;
-      padding: 12px 15px;
-      font-size: 1.1rem;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      transition: border-color 0.3s;
-      margin-bottom: 20px;
-    }
-
-    main input[type="password"]:focus {
-      outline: none;
-      border-color: #0052cc;
-      box-shadow: 0 0 5px #0052ccaa;
-    }
-
-    main button {
-      padding: 12px 25px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #0052cc;
-      color: white;
-      margin-bottom: 10px;
-      width: 100%;
-      transition: background 0.3s;
-      user-select: none;
-    }
-
-    main button:hover {
-      background: #0073ff;
-    }
-
-    #generate-btn {
-      background: #28a745;
-    }
-
-    #generate-btn:hover {
-      background: #2ecc40;
-    }
-
-    /* Feedback message */
-    .feedback {
-      font-weight: 60
+      // Dark mode toggle
