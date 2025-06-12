@@ -1,101 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ShieldPass</title>
+<meta charset="UTF-8" />
+<title>ShieldPass</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 50px auto;
+    text-align: center;
+  }
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1em;
+  }
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  #feedback {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  .strong {
+    color: green;
+  }
+  .weak {
+    color: red;
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to ShieldPass</h1>
-  <p>Your password strength checker app.</p>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShieldPass</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f8;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    h1 {
-      color: #2c3e50;
-      font-size: 2.5rem;
-    }
-
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    input[type="password"] {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 1rem 0;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-    }
-
-    #feedback {
-      font-weight: bold;
-      margin-top: 0.5rem;
-    }
-
-    .weak { color: red; }
-    .medium { color: orange; }
-    .strong { color: green; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🛡️ ShieldPass</h1>
-    <p>Check your password strength</p>
-    <input type="password" id="password" placeholder="Enter your password" />
-    <div id="feedback"></div>
-  </div>
+  <h1>ShieldPass</h1>
+  <p>Check your password strength:</p>
+  <input type="password" id="passwordInput" placeholder="Enter password" />
+  <button onclick="checkPassword()">Check</button>
+  <div id="feedback"></div>
 
   <script>
-    const passwordInput = document.getElementById('password');
-    const feedback = document.getElementById('feedback');
-
-    passwordInput.addEventListener('input', () => {
-      const password = passwordInput.value;
-      let strength = '';
-
-      const length = password.length >= 8;
-      const upper = /[A-Z]/.test(password);
-      const lower = /[a-z]/.test(password);
-      const digit = /\d/.test(password);
-      const symbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-      const passed = [length, upper, lower, digit, symbol].filter(Boolean).length;
-
-      if (passed <= 2) {
-        strength = '<span class="weak">❌ Weak password</span>';
-      } else if (passed === 3 || passed === 4) {
-        strength = '<span class="medium">⚠️ Medium strength</span>';
-      } else if (passed === 5) {
-        strength = '<span class="strong">✅ Strong password</span>';
+    function checkPassword() {
+      const pwd = document.getElementById('passwordInput').value;
+      const feedback = document.getElementById('feedback');
+      
+      const lengthCheck = pwd.length >= 8;
+      const upperCheck = /[A-Z]/.test(pwd);
+      const lowerCheck = /[a-z]/.test(pwd);
+      const digitCheck = /\d/.test(pwd);
+      const symbolCheck = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+      
+      if(lengthCheck && upperCheck && lowerCheck && digitCheck && symbolCheck){
+        feedback.textContent = "✅ Your password is strong.";
+        feedback.className = "strong";
+      } else {
+        feedback.textContent = "❌ Weak password! Use at least 8 chars, uppercase, lowercase, digits, and symbols.";
+        feedback.className = "weak";
       }
-
-      feedback.innerHTML = strength;
-    });
+    }
   </script>
 </body>
 </html>
