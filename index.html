@@ -1,455 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ShieldPass</title>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-/>
-<!-- Inter font like Bitwarden -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-<style>
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background: #f0f0f0;
-    color: #222;
-    transition: background 0.3s, color 0.3s;
-    text-align: center;
-  }
-  header {
-    background: #a8d0ff; /* baby blue */
-    color: #003366;
-    padding: 15px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 700;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
-  }
-  header .logo {
-    font-size: 2.5rem;
-    user-select: none;
-    flex-grow: 1;
-    text-align: center;
-    letter-spacing: 1.5px;
-    color: #003366;
-  }
-  nav {
-    flex-grow: 0;
-  }
-  nav a {
-    color: #003366;
-    margin-left: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.3s ease;
-  }
-  nav a::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background: #003366;
-    width: 0;
-    transition: width 0.3s ease;
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-  }
-  nav a:hover {
-    color: #0049b7;
-  }
-  nav a:hover::after {
-    width: 100%;
-  }
-  #mode-toggle {
-    background: transparent;
-    border: 2px solid #003366;
-    border-radius: 6px;
-    color: #003366;
-    font-weight: 600;
-    padding: 6px 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.3s, color 0.3s;
-    margin-left: 20px;
-  }
-  #mode-toggle:hover {
-    background: #003366;
-    color: #a8d0ff;
-  }
-  main {
-    max-width: 450px;
-    margin: 60px auto 40px auto;
-    background: white;
-    padding: 40px 40px 50px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
-    transition: background 0.3s, box-shadow 0.3s;
-    text-align: center;
-  }
-  main h1 {
-    margin-bottom: 25px;
-    font-weight: 700;
-    font-size: 2.4rem;
-    user-select: none;
-    color: #003366;
-  }
-  main label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-    text-align: center;
-    color: #003366;
-  }
-  .input-copy-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-  main input[type="password"] {
-    width: 100%;
-    padding: 14px 45px 14px 15px; /* space for copy icon on right */
-    font-size: 1.2rem;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    transition: border-color 0.3s;
-  }
-  main input[type="password"]:focus {
-    outline: none;
-    border-color: #a8d0ff;
-    box-shadow: 0 0 8px #a8d0ffaa;
-  }
-  #copy-btn {
-    position: absolute;
-    right: 12px;
-    cursor: pointer;
-    color: #555;
-    font-size: 1.3rem;
-    user-select: none;
-    background: transparent;
-    border: none;
-    padding: 0;
-    transition: color 0.3s;
-  }
-  #copy-btn:hover {
-    color: #003366;
-  }
-  main button.check,
-  main button.generate {
-    padding: 14px 25px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    transition: background 0.3s;
-    user-select: none;
-    margin-bottom: 15px;
-  }
-  main button.check {
-    background: #a8d0ff;
-    color: #003366;
-  }
-  main button.check:hover {
-    background: #b5d3ff;
-  }
-  main button.generate {
-    background: #28a745;
-    color: white;
-  }
-  main button.generate:hover {
-    background: #2ecc40;
-  }
-  .feedback {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-top: 15px;
-    min-height: 28px;
-    user-select: none;
-    text-align: center;
-  }
-  .feedback.strong {
-    color: #28a745;
-  }
-  .feedback.weak {
-    color: #d63031;
-  }
-  section#about {
-    max-width: 600px;
-    margin: 40px auto 80px auto;
-    font-size: 1.1rem;
-    color: #555;
-    line-height: 1.6;
-    padding: 0 20px;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-  }
-  section#about h2 {
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: #003366;
-  }
-  section#about p.summary {
-    margin-bottom: 0;
-  }
-  section#about p.detail {
-    display: none;
-    margin-top: 10px;
-    font-weight: 400;
-    color: #333;
-    cursor: default;
-  }
-  /* New section for tagline */
-  #tagline {
-    max-width: 600px;
-    margin: 0 auto 40px auto;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: #003366;
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShieldPass</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  /* Dark mode */
-  body.dark-mode {
-    background: #121212;
-    color: #ddd;
-  }
-  body.dark-mode main {
-    background: #1e1e1e;
-    box-shadow: 0 8px 24px rgb(255 255 255 / 0.1);
-  }
-  body.dark-mode header {
-    background: #4974d4;
-  }
-  body.dark-mode nav a {
-    color: #ddd;
-  }
-  body.dark-mode nav a:hover {
-    text-decoration: underline;
-  }
-  body.dark-mode #mode-toggle {
-    border-color: #ddd;
-    color: #ddd;
-  }
-  body.dark-mode #mode-toggle:hover {
-    background: #ddd;
-    color: #4974d4;
-  }
-  body.dark-mode input[type="password"] {
-    background: #333;
-    color: #eee;
-    border: 1px solid #555;
-  }
-  body.dark-mode button.check,
-  body.dark-mode button.generate {
-    background: #4974d4;
-    color: white;
-  }
-  body.dark-mode button.check:hover,
-  body.dark-mode button.generate:hover {
-    background: #6a90ff;
-  }
-  #copy-btn {
-    color: #555;
-  }
-  body.dark-mode #copy-btn {
-    color: #ccc;
-  }
-  #copy-btn:hover {
-    color: #003366;
-  }
-  body.dark-mode #copy-btn:hover {
-    color: #a8d0ff;
-  }
-</style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f0f4f8;
+      color: #222;
+      transition: background 0.3s, color 0.3s;
+      text-align: center;
+    }
+
+    header {
+      background: #b3d9ff;
+      color: #000;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    nav a {
+      margin-left: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #000;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #mode-toggle {
+      font-size: 1rem;
+      padding: 5px 15px;
+      background: transparent;
+      border: 2px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    main {
+      background: white;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    main h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 15px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+
+    #check-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #generate-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #copy-btn {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .feedback {
+      font-weight: 600;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    .feedback.strong {
+      color: #28a745;
+    }
+
+    .feedback.weak {
+      color: #d63031;
+    }
+
+    section#about {
+      max-width: 700px;
+      margin: 50px auto;
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.6;
+      display: none;
+    }
+
+    section#about.active {
+      display: block;
+    }
+
+    body.dark-mode {
+      background: #1c1c1c;
+      color: #eee;
+    }
+
+    body.dark-mode header {
+      background: #004080;
+      color: white;
+    }
+
+    body.dark-mode nav a,
+    body.dark-mode #mode-toggle {
+      color: white;
+      border-color: white;
+    }
+
+    body.dark-mode main {
+      background: #333;
+      color: white;
+    }
+
+    body.dark-mode input {
+      background: #444;
+      color: white;
+      border-color: #666;
+    }
+
+    body.dark-mode button {
+      border: none;
+    }
+
+  </style>
 </head>
 <body>
-<header>
-  <nav>
-    <a href="#top" id="home-link">Home</a>
-    <a href="#about" id="about-link">About</a>
-  </nav>
-  <div class="logo" aria-label="ShieldPass logo">🛡️ ShieldPass</div>
-  <button id="mode-toggle" aria-label="Toggle light/dark mode">Dark Mode</button>
-</header>
+  <header>
+    <div class="logo">🛡️ ShieldPass</div>
+    <nav>
+      <a href="#" onclick="showHome()">Home</a>
+      <a href="#" onclick="showAbout()">About</a>
+    </nav>
+    <button id="mode-toggle">Dark Mode</button>
+  </header>
 
-<main id="top">
-  <h1>Check your password strength</h1>
-  <label for="password-input">Enter your password:</label>
-  <div class="input-copy-container">
-    <input
-      type="password"
-      id="password-input"
-      placeholder="••••••••••••••"
-      autocomplete="off"
-      aria-describedby="result"
-    />
-    <button id="copy-btn" title="Copy password" aria-label="Copy password to clipboard"><i class="fa-regular fa-copy"></i></button>
-  </div>
-  <button class="check" id="check-btn">Check</button>
-  <button class="generate" id="generate-btn">Generate Strong Password</button>
-  <div id="result" class="feedback" role="alert" aria-live="polite"></div>
-</main>
+  <main id="main-section">
+    <h1>Check your password strength</h1>
+    <p class="tagline">ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
 
-<div id="tagline" aria-label="ShieldPass tagline">
-  The most trusted password manager<br />
-  ShieldPass securely stores, manages, and shares your sensitive data — from passwords to passkeys and credit cards — with privacy and ease.
-</div>
+    <label for="password-input">Enter your password:</label>
+    <div class="password-wrapper">
+      <input type="password" id="password-input" placeholder="••••••••••••••">
+      <i class="fas fa-eye eye-icon" id="toggle-eye"></i>
+    </div>
 
-<section id="about" tabindex="0" aria-expanded="false" aria-controls="about-detail">
-  <h2>About ShieldPass</h2>
-  <p class="summary">Click here to learn more about ShieldPass.</p>
-  <p id="about-detail" class="detail" role="region">
-    ShieldPass is a Python tool that checks password strength and alerts users if their passwords are weak or have appeared in known data breaches. It helps improve security and encourages better password hygiene, all while respecting user privacy.
-  </p>
-</section>
+    <button id="check-btn">Check</button>
+    <button id="generate-btn">Generate Strong Password</button>
+    <button id="copy-btn">📋 Copy</button>
 
-<script>
-  // Smooth scroll for nav links
-  document.getElementById("home-link").addEventListener("click", (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+    <div id="result" class="feedback"></div>
+  </main>
 
-  document.getElementById("about-link").addEventListener("click", (e) => {
-    e.preventDefault();
-    document.getElementById("about").scrollIntoView({ behavior: "smooth" });
-  });
+  <section id="about">
+    <h2>ShieldPass</h2>
+    <p>ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
+  </section>
 
-  // About section toggle detail text
-  const aboutSection = document.getElementById("about");
-  const aboutDetail = document.getElementById("about-detail");
-  const aboutSummary = aboutSection.querySelector(".summary");
+  <script>
+    const passwordInput = document.getElementById("password-input");
+    const result = document.getElementById("result");
+    const checkBtn = document.getElementById("check-btn");
+    const generateBtn = document.getElementById("generate-btn");
+    const copyBtn = document.getElementById("copy-btn");
+    const eyeIcon = document.getElementById("toggle-eye");
+    const modeToggle = document.getElementById("mode-toggle");
+    const mainSection = document.getElementById("main-section");
+    const aboutSection = document.getElementById("about");
 
-  aboutSection.addEventListener("click", () => {
-    const expanded = aboutSection.getAttribute("aria-expanded") === "true";
-    if (expanded) {
-      aboutDetail.style.display = "none";
-      aboutSummary.style.display = "block";
-      aboutSection.setAttribute("aria-expanded", "false");
-    } else {
-      aboutDetail.style.display = "block";
-      aboutSummary.style.display = "none";
-      aboutSection.setAttribute("aria-expanded", "true");
-    }
-  });
-
-  // Keyboard accessibility for about section
-  aboutSection.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      aboutSection.click();
-    }
-  });
-
-  // Password strength check
-  function isStrongPassword(password) {
-    const lengthError = password.length < 8;
-    const digitError = !/\d/.test(password);
-    const uppercaseError = !/[A-Z]/.test(password);
-    const lowercaseError = !/[a-z]/.test(password);
-    const symbolError = !/[!@#$%^&*(),.?":{}|<>]/.test(password);
-    return !(lengthError || digitError || uppercaseError || lowercaseError || symbolError);
-  }
-
-  const input = document.getElementById("password-input");
-  const checkBtn = document.getElementById("check-btn");
-  const result = document.getElementById("result");
-  const modeToggle = document.getElementById("mode-toggle");
-  const generateBtn = document.getElementById("generate-btn");
-  const copyBtn = document.getElementById("copy-btn");
-
-  checkBtn.onclick = () => {
-    const pwd = input.value.trim();
-    if (!pwd) {
-      result.textContent = "Please enter a password.";
-      result.className = "feedback weak";
-      return;
-    }
-    if (isStrongPassword(pwd)) {
-      result.textContent = "✅ Strong password!";
-      result.className = "feedback strong";
-    } else {
-      result.textContent =
-        "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
-      result.className = "feedback weak";
-    }
-  };
-
-  // Light/Dark mode toggle with text update
-  modeToggle.onclick = () => {
-    const isDark = document.body.classList.toggle("dark-mode");
-    modeToggle.textContent = isDark ? "Light Mode" : "Dark Mode";
-  };
-
-  // Generate a strong password with length 12, mixed types
-  function generatePassword(length = 12) {
-    const lower = "abcdefghijklmnopqrstuvwxyz";
-    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const digits = "0123456789";
-    const symbols = "!@#$%^&*()_+{}:\"<>?|[];',./`~";
-    const all = lower + upper + digits + symbols;
-
-    let password = "";
-    // Ensure at least one from each category
-    password += lower[Math.floor(Math.random() * lower.length)];
-    password += upper[Math.floor(Math.random() * upper.length)];
-    password += digits[Math.floor(Math.random() * digits.length)];
-    password += symbols[Math.floor(Math.random() * symbols.length)];
-
-    for (let i = 4; i < length; i++) {
-      password += all.charAt(Math.floor(Math.random() * all.length));
+    function isStrongPassword(pwd) {
+      return pwd.length >= 8 &&
+             /[A-Z]/.test(pwd) &&
+             /[a-z]/.test(pwd) &&
+             /[0-9]/.test(pwd) &&
+             /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
     }
 
-    // Shuffle the password characters to avoid predictable pattern
-    password = password
-      .split("")
-      .sort(() => Math.random() - 0.5)
-      .join("");
-    return password;
-  }
-
-  generateBtn.onclick = () => {
-    const newPwd = generatePassword();
-    input.value = newPwd;
-    result.textContent = "Generated a strong password! Copy and use it.";
-    result.className = "feedback strong";
-  };
-
-  // Copy button functionality
-  copyBtn.onclick = () => {
-    if (!input.value) return;
-    navigator.clipboard.writeText(input.value).then(
-      () => {
-        result.textContent = "Copied to clipboard!";
+    checkBtn.onclick = () => {
+      const pwd = passwordInput.value;
+      if (!pwd) {
+        result.textContent = "Please enter a password.";
+        result.className = "feedback weak";
+        return;
+      }
+      if (isStrongPassword(pwd)) {
+        result.textContent = "✅ Strong password!";
         result.className = "feedback strong";
-      },
-      () => {
-        result.textContent = "Failed to copy. Please copy manually.";
+      } else {
+        result.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
         result.className = "feedback weak";
       }
-    );
-  };
-</script>
+    };
+
+    generateBtn.onclick = () => {
+      const length = 14;
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:\"<>?|[];',./`~";
+      let newPwd = "";
+      for (let i = 0; i < length; i++) {
+        newPwd += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      passwordInput.type = "text";
+      passwordInput.value = newPwd;
+      eyeIcon.className = "fas fa-eye-slash eye-icon";
+      result.textContent = "Generated a strong password!";
+      result.className = "feedback strong";
+    };
+
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(passwordInput.value).then(() => {
+        result.textContent = "Copied to clipboard!";
+        result.className = "feedback strong";
+      });
+    };
+
+    eyeIcon.onclick = () => {
+      const isPwd = passwordInput.type === "password";
+      passwordInput.type = isPwd ? "text" : "password";
+      eyeIcon.className = isPwd ? "fas fa-eye-slash eye-icon" : "fas fa-eye eye-icon";
+    };
+
+    modeToggle.onclick = () => {
+      document.body.classList.toggle("dark-mode");
+      modeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
+    };
+
+    function showAbout() {
+      mainSection.style.display = "none";
+      aboutSection.classList.add("active");
+    }
+
+    function showHome() {
+      mainSection.style.display = "block";
+      aboutSection.classList.remove("active");
+    }
+  </script>
 </body>
 </html>
