@@ -4,531 +4,357 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ShieldPass</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Base & layout styles */
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
       background: #f0f4f8;
       color: #222;
       transition: background 0.3s, color 0.3s;
-      text-align: center;
     }
-
     header {
       background: #b3d9ff;
-      color: #000;
-      padding: 15px 40px;
+      padding: 12px 30px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
     .nav-left {
       display: flex;
       gap: 20px;
+      align-items: center;
+    }
+    .nav-left a {
+      text-decoration: none;
+      color: #000;
       font-weight: 600;
       font-size: 1rem;
-      flex-grow: 1;
-      justify-content: flex-start;
-    }
-
-    .nav-left a {
-      color: #000;
-      text-decoration: none;
       cursor: pointer;
     }
-
-    .nav-left a:hover {
-      text-decoration: underline;
-    }
-
     .logo {
-      font-size: 2.5rem;
-      font-weight: bold;
-      flex-grow: 0;
-      margin: 0 auto;
+      flex: 1;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.8rem;
+      user-select: none;
     }
-
     #mode-toggle {
       font-size: 0.9rem;
-      padding: 5px 12px;
-      background: transparent;
-      border: 2px solid #000;
+      padding: 6px 12px;
       border-radius: 5px;
+      border: 1px solid #000;
+      background: transparent;
       cursor: pointer;
-      flex-grow: 0;
-      color: #000;
       user-select: none;
     }
-
-    main, section#about {
-      max-width: 700px;
-      margin: 40px auto 60px;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      text-align: left;
-      color: #222;
+    main, section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-
-    main h1, section#about h2, section#about h3 {
+    #main-section {
       text-align: center;
-      margin-bottom: 20px;
+    }
+    #about-page {
+      display: none;
+      color: #111;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      margin-bottom: 10px;
       font-weight: 700;
+      color: #003366;
     }
-
-    main p.tagline {
+    p {
+      margin-top: 0;
+      margin-bottom: 24px;
+      font-weight: 400;
       font-size: 1.1rem;
-      text-align: center;
-      margin-bottom: 40px;
-      color: #444;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
     }
-
-    /* Password checker styles */
-    label {
+    button.cta {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 30px;
+    }
+    .feature-list, .steps-list, .testimonials-list {
+      margin: 0 0 30px 0;
+      padding-left: 1.2rem;
+    }
+    .feature-list li, .steps-list li, .testimonials-list li {
+      margin-bottom: 12px;
+      font-weight: 500;
+      font-size: 1rem;
+      max-width: 600px;
+    }
+    .feature-list strong, .steps-list strong {
       display: block;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      color: #0059b3;
     }
-
-    .password-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    input[type="password"],
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 12px 45px 12px 15px; /* room for eye icon */
-      font-size: 1rem;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      transition: border-color 0.3s;
-    }
-
-    input[type="password"]:focus,
-    input[type="text"]:focus {
-      border-color: #007bff;
-      outline: none;
-    }
-
-    .eye-icon {
-      position: absolute;
-      right: 12px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #555;
-      user-select: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 12px 0;
-      transition: background-color 0.3s;
-      user-select: none;
-    }
-
-    #check-btn {
-      background-color: #007bff;
-      color: white;
-    }
-
-    #check-btn:hover {
-      background-color: #0056b3;
-    }
-
-    #generate-btn {
-      background-color: #28a745;
-      color: white;
-    }
-
-    #generate-btn:hover {
-      background-color: #1e7e34;
-    }
-
-    #copy-btn {
-      background-color: #a8d0ff;
-      color: #004080;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      user-select: none;
-    }
-
-    #copy-btn:hover {
-      background-color: #81b9ff;
-    }
-
-    .feedback {
-      font-weight: 600;
-      min-height: 24px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .feedback.strong {
-      color: #28a745;
-    }
-
-    .feedback.weak {
-      color: #d63031;
-    }
-
-    /* About page layout */
-
-    section#about h2 {
-      margin-top: 0;
-      font-size: 2rem;
-      text-align: center;
-    }
-
-    section#about h3 {
-      margin-bottom: 12px;
-      font-size: 1.3rem;
-    }
-
-    section#about p {
-      margin-bottom: 20px;
-      line-height: 1.6;
-      color: #333;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 600;
-      font-size: 1rem;
-      color: #222;
-    }
-
-    .feature-item i {
-      color: #007bff;
-      font-size: 1.5rem;
-      min-width: 28px;
-      text-align: center;
-    }
-
-    .steps {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .step {
-      max-width: 180px;
-    }
-
-    .step i {
-      font-size: 2.5rem;
-      color: #007bff;
-      margin-bottom: 10px;
-    }
-
-    /* Testimonials grid */
-
-    .testimonials {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-
-    .testimonial {
-      background: #f9f9f9;
-      border-radius: 10px;
-      padding: 20px;
+    .testimonials-list li {
       font-style: italic;
-      color: #555;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      color: #444;
+      border-left: 4px solid #007bff;
+      padding-left: 10px;
+      background: #e9f1ff;
+      max-width: 600px;
+      border-radius: 4px;
     }
-
-    /* Call to action footer */
-
-    .cta-footer {
-      text-align: center;
-      background: #007bff;
-      color: white;
-      padding: 40px 20px;
-      border-radius: 12px;
-      max-width: 700px;
-      margin: 0 auto 80px;
-    }
-
-    .cta-footer h2 {
-      margin-bottom: 12px;
-      font-size: 2rem;
-    }
-
-    .cta-footer p {
-      margin-bottom: 24px;
-      font-size: 1.1rem;
-    }
-
-    .cta-footer button {
-      max-width: 220px;
-      background: white;
-      color: #007bff;
+    .section-heading {
+      margin-top: 40px;
+      margin-bottom: 15px;
+      font-size: 1.6rem;
+      color: #004080;
       font-weight: 700;
-      font-size: 1.1rem;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
+      user-select: none;
     }
-
-    .cta-footer button:hover {
-      background: #e6f0ff;
-    }
-
-    /* Dark mode styles */
-
-    body.dark-mode {
+    /* Dark mode */
+    .dark-mode {
       background: #121212;
       color: #eee;
     }
-
-    body.dark-mode header {
-      background: #003366;
-      color: white;
-    }
-
-    body.dark-mode .nav-left a,
-    body.dark-mode #mode-toggle {
-      color: white;
-      border-color: white;
-    }
-
-    body.dark-mode main,
-    body.dark-mode section#about {
-      background: #1e1e1e;
+    .dark-mode header {
+      background: #004080;
       color: #ddd;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .dark-mode a {
+      color: #aad4ff;
+    }
+    .dark-mode button.cta {
+      background-color: #3399ff;
+    }
+    .dark-mode .testimonials-list li {
+      background: #004080;
+      color: #cce6ff;
+      border-color: #3399ff;
     }
 
-    body.dark-mode input[type="password"],
-    body.dark-mode input[type="text"] {
-      background: #333;
-      color: #eee;
-      border-color: #555;
+    /* Password checker styles */
+    #password-container {
+      margin-top: 30px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
     }
-
-    body.dark-mode button {
+    #password-input {
+      width: 100%;
+      padding: 10px 40px 10px 10px;
+      font-size: 1rem;
+      border: 2px solid #007bff;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+      position: relative;
+    }
+    #password-input:focus {
+      border-color: #0059b3;
+    }
+    .eye-icon {
+      position: relative;
+      left: -30px;
+      top: -32px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #007bff;
+      user-select: none;
+    }
+    .buttons-container {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    button {
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
       border: none;
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+      transition: background-color 0.3s;
     }
-
-    body.dark-mode .feedback.strong {
-      color: #4ade80; /* brighter green */
+    button:hover {
+      background-color: #0059b3;
     }
-
-    body.dark-mode .feedback.weak {
-      color: #ff6b6b; /* softer red */
+    .feedback {
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      user-select: none;
+    }
+    .feedback.strong {
+      color: green;
+    }
+    .feedback.weak {
+      color: red;
     }
   </style>
+
+  <!-- FontAwesome for eye icon -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
   <header>
     <nav class="nav-left">
-      <a id="nav-home" onclick="showHome()">Home</a>
-      <a id="nav-about" onclick="showAbout()">About</a>
+      <a onclick="showHome()" href="javascript:void(0)">Home</a>
+      <a onclick="showAbout()" href="javascript:void(0)">About</a>
     </nav>
     <div class="logo">🛡️ ShieldPass</div>
-    <button id="mode-toggle" aria-label="Toggle Light/Dark Mode">Dark Mode</button>
+    <button id="mode-toggle" onclick="toggleMode()">Dark Mode</button>
   </header>
 
-  <main id="home-section">
+  <main id="main-section">
     <h1>Check your password strength</h1>
-    <p class="tagline">ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
+    <p>ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
 
-    <label for="password-input">Enter your password:</label>
-    <div class="password-wrapper">
-      <input type="password" id="password-input" placeholder="••••••••••••••" autocomplete="new-password" />
-      <i class="fas fa-eye eye-icon" id="toggle-eye" title="Show/Hide Password"></i>
+    <div id="password-container">
+      <input type="password" id="password-input" placeholder="Enter your password" />
+      <i id="eye-icon" class="fas fa-eye eye-icon"></i>
+      <div class="buttons-container">
+        <button id="check-btn">Check Strength</button>
+        <button id="generate-btn">Generate Password</button>
+        <button id="copy-btn">Copy</button>
+      </div>
+      <div id="result" class="feedback"></div>
     </div>
-
-    <button id="check-btn">Check</button>
-    <button id="generate-btn">Generate Strong Password</button>
-    <button id="copy-btn" title="Copy generated password">📋 Copy</button>
-
-    <div id="result" class="feedback"></div>
   </main>
 
-  <section id="about" style="display:none;">
-    <h2>Your Digital Vault, Reinvented</h2>
-    <p style="text-align:center; font-size:1.2rem; margin-bottom: 30px;">
-      ShieldPass securely stores, manages, and shares your sensitive data with privacy and ease.
-    </p>
-    <div style="text-align:center; margin-bottom: 40px;">
-      <button onclick="showHome()" style="font-weight:700; font-size:1.1rem; padding:12px 25px; border-radius:8px; border:none; background:#007bff; color:white; cursor:pointer;">Get Started</button>
-    </div>
+  <section id="about-page">
+    <h1>Your Digital Vault, Reinvented</h1>
+    <p>ShieldPass securely stores, manages, and shares your sensitive data with privacy and ease.</p>
+    <button class="cta" onclick="showHome()">Get Started</button>
 
-    <h3>What is ShieldPass?</h3>
+    <h2 class="section-heading">What is ShieldPass?</h2>
     <p>ShieldPass is a modern password manager designed to give individuals and teams a safer, smarter way to handle their sensitive information. From passwords and passkeys to credit card data, ShieldPass provides a secure and intuitive solution for managing your digital life.</p>
 
-    <h3>Why Choose ShieldPass</h3>
-    <div class="features-grid">
-      <div class="feature-item"><i class="fas fa-lock"></i> Military-Grade Encryption<br><small>Your data is encrypted before it leaves your device.</small></div>
-      <div class="feature-item"><i class="fas fa-mobile-alt"></i> Cross-Device Access<br><small>Securely access your vault on mobile, desktop, or browser.</small></div>
-      <div class="feature-item"><i class="fas fa-keyboard"></i> Password Generator<br><small>Create strong, unique passwords in a single tap.</small></div>
-      <div class="feature-item"><i class="fas fa-user-friends"></i> Private Sharing<br><small>Share credentials with trusted contacts, without exposing the password.</small></div>
-    </div>
+    <h2 class="section-heading">Why Choose ShieldPass</h2>
+    <ul class="feature-list">
+      <li><strong>Military-Grade Encryption</strong>Your data is encrypted before it leaves your device.</li>
+      <li><strong>Cross-Device Access</strong>Securely access your vault on mobile, desktop, or browser.</li>
+      <li><strong>Password Generator</strong>Create strong, unique passwords in a single tap.</li>
+      <li><strong>Private Sharing</strong>Share credentials with trusted contacts, without exposing the password.</li>
+    </ul>
 
-    <h3>How It Works</h3>
-    <div class="steps">
-      <div class="step"><i class="fas fa-save"></i><strong>Store</strong><br>Add passwords, passkeys, and payment info securely.</div>
-      <div class="step"><i class="fas fa-cogs"></i><strong>Manage</strong><br>Organise and edit entries across your devices.</div>
-      <div class="step"><i class="fas fa-share-alt"></i><strong>Share</strong><br>Securely share access with people you trust.</div>
-    </div>
+    <h2 class="section-heading">How It Works</h2>
+    <ul class="steps-list">
+      <li><strong>Store</strong>Add passwords, passkeys, and payment info securely.</li>
+      <li><strong>Manage</strong>Organise and edit entries across your devices.</li>
+      <li><strong>Share</strong>Securely share access with people you trust.</li>
+    </ul>
 
-    <h3>Privacy You Can Count On</h3>
+    <h2 class="section-heading">Privacy You Can Count On</h2>
     <p>ShieldPass uses zero-knowledge architecture, which means only you can access your data — not even we can see it. Your security and privacy are our top priorities.</p>
 
-    <h3>What Users Are Saying</h3>
-    <div class="testimonials">
-      <div class="testimonial">“I finally feel secure online.”</div>
-      <div class="testimonial">“Sharing logins with my team has never been easier.”</div>
-      <div class="testimonial">“Love the clean interface and password suggestions.”</div>
-    </div>
+    <h2 class="section-heading">What Users Are Saying</h2>
+    <ul class="testimonials-list">
+      <li>“I finally feel secure online.”</li>
+      <li>“Sharing logins with my team has never been easier.”</li>
+      <li>“Love the clean interface and password suggestions.”</li>
+    </ul>
 
-    <div class="cta-footer">
-      <h2>Ready to Take Control of Your Digital Security?</h2>
-      <p>Join thousands of users who trust ShieldPass every day.</p>
-      <button onclick="showHome()">Get Started for Free</button>
-    </div>
+    <h2 class="section-heading">Ready to Take Control of Your Digital Security?</h2>
+    <p>Join thousands of users who trust ShieldPass every day.</p>
+    <button class="cta" onclick="showHome()">Get Started for Free</button>
   </section>
 
   <script>
-    // Toggle between Home and About
-    function showHome() {
-      document.getElementById('home-section').style.display = 'block';
-      document.getElementById('about').style.display = 'none';
-      highlightNav('nav-home');
+    const passwordInput = document.getElementById('password-input');
+    const checkBtn = document.getElementById('check-btn');
+    const generateBtn = document.getElementById('generate-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const eyeIcon = document.getElementById('eye-icon');
+    const result = document.getElementById('result');
+
+    function isStrongPassword(pwd) {
+      return pwd.length >= 8 &&
+             /[A-Z]/.test(pwd) &&
+             /[a-z]/.test(pwd) &&
+             /[0-9]/.test(pwd) &&
+             /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+    }
+
+    checkBtn.onclick = () => {
+      const pwd = passwordInput.value;
+      if (!pwd) {
+        result.textContent = "Please enter a password.";
+        result.className = "feedback weak";
+        return;
+      }
+      if (isStrongPassword(pwd)) {
+        result.textContent = "✅ Strong password!";
+        result.className = "feedback strong";
+      } else {
+        result.textContent = "❌ Weak password! Use at least 8 characters, uppercase, lowercase, digits, and symbols.";
+        result.className = "feedback weak";
+      }
+    };
+
+    generateBtn.onclick = () => {
+      const length = 14;
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:\"<>?|[];',./`~";
+      let newPwd = "";
+      for (let i = 0; i < length; i++) {
+        newPwd += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      passwordInput.type = "text";
+      passwordInput.value = newPwd;
+      eyeIcon.className = "fas fa-eye-slash eye-icon";
+      result.textContent = "Generated a strong password!";
+      result.className = "feedback strong";
+    };
+
+    copyBtn.onclick = () => {
+      if (!passwordInput.value) {
+        result.textContent = "Nothing to copy!";
+        result.className = "feedback weak";
+        return;
+      }
+      navigator.clipboard.writeText(passwordInput.value).then(() => {
+        result.textContent = "Copied to clipboard!";
+        result.className = "feedback strong";
+      });
+    };
+
+    eyeIcon.onclick = () => {
+      const isPwd = passwordInput.type === "password";
+      passwordInput.type = isPwd ? "text" : "password";
+      eyeIcon.className = isPwd ? "fas fa-eye-slash eye-icon" : "fas fa-eye eye-icon";
+    };
+
+    // Dark mode toggle and page show/hide functions
+    function toggleMode() {
+      const body = document.body;
+      const toggle = document.getElementById('mode-toggle');
+      body.classList.toggle('dark-mode');
+      toggle.textContent = body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
     }
 
     function showAbout() {
-      document.getElementById('home-section').style.display = 'none';
-      document.getElementById('about').style.display = 'block';
-      highlightNav('nav-about');
+      document.getElementById('main-section').style.display = 'none';
+      document.getElementById('about-page').style.display = 'block';
     }
 
-    function highlightNav(activeId) {
-      ['nav-home', 'nav-about'].forEach(id => {
-        document.getElementById(id).style.textDecoration = (id === activeId) ? 'underline' : 'none';
-      });
+    function showHome() {
+      document.getElementById('main-section').style.display = 'block';
+      document.getElementById('about-page').style.display = 'none';
     }
-
-    // Initial highlight
-    showHome();
-
-    // Password visibility toggle
-    const passwordInput = document.getElementById('password-input');
-    const toggleEye = document.getElementById('toggle-eye');
-    toggleEye.addEventListener('click', () => {
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleEye.classList.remove('fa-eye');
-        toggleEye.classList.add('fa-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        toggleEye.classList.remove('fa-eye-slash');
-        toggleEye.classList.add('fa-eye');
-      }
-    });
-
-    // Password strength checker (simple example)
-    const checkBtn = document.getElementById('check-btn');
-    const result = document.getElementById('result');
-
-    checkBtn.addEventListener('click', () => {
-      const pwd = passwordInput.value;
-      let strength = 0;
-      if (pwd.length >= 12) strength++;
-      if (/[A-Z]/.test(pwd)) strength++;
-      if (/[a-z]/.test(pwd)) strength++;
-      if (/\d/.test(pwd)) strength++;
-      if (/[^A-Za-z0-9]/.test(pwd)) strength++;
-
-      if (!pwd) {
-        result.textContent = '';
-        result.className = 'feedback';
-        return;
-      }
-      if (strength >= 4) {
-        result.textContent = 'Strong password 💪';
-        result.className = 'feedback strong';
-      } else {
-        result.textContent = 'Weak password ⚠️';
-        result.className = 'feedback weak';
-      }
-    });
-
-    // Generate strong password (12+ chars with mix)
-    const generateBtn = document.getElementById('generate-btn');
-    generateBtn.addEventListener('click', () => {
-      const length = 12;
-      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
-      let retVal = "";
-      while (true) {
-        retVal = "";
-        for (let i = 0, n = charset.length; i < length; ++i) {
-          retVal += charset.charAt(Math.floor(Math.random() * n));
-        }
-        // Ensure at least one uppercase, lowercase, digit, and symbol
-        if (/[A-Z]/.test(retVal) && /[a-z]/.test(retVal) && /\d/.test(retVal) && /[^A-Za-z0-9]/.test(retVal)) {
-          break;
-        }
-      }
-      passwordInput.value = retVal;
-      result.textContent = 'Generated a strong password ✔️';
-      result.className = 'feedback strong';
-      // Set type back to password for security
-      passwordInput.type = 'password';
-      toggleEye.classList.remove('fa-eye-slash');
-      toggleEye.classList.add('fa-eye');
-    });
-
-    // Copy to clipboard
-    const copyBtn = document.getElementById('copy-btn');
-    copyBtn.addEventListener('click', () => {
-      const pwd = passwordInput.value;
-      if (!pwd) return alert('Nothing to copy!');
-      navigator.clipboard.writeText(pwd).then(() => {
-        result.textContent = 'Password copied to clipboard 📋';
-        result.className = 'feedback strong';
-      }).catch(() => {
-        alert('
-
+  </script>
+</body>
+</html>
