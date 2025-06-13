@@ -142,60 +142,59 @@
     }
 
     /* Password checker styles */
-    #password-container {
-      margin-top: 30px;
+    .password-container {
+      position: relative;
       max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 20px;
       text-align: left;
     }
-    #password-input {
+    input[type="password"], input[type="text"] {
       width: 100%;
-      padding: 10px 40px 10px 10px;
-      font-size: 1rem;
-      border: 2px solid #007bff;
+      padding: 10px 40px 10px 12px;
+      font-size: 1.1rem;
       border-radius: 6px;
-      outline: none;
+      border: 1px solid #ccc;
       box-sizing: border-box;
-      position: relative;
-    }
-    #password-input:focus {
-      border-color: #0059b3;
     }
     .eye-icon {
-      position: relative;
-      left: -30px;
-      top: -32px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
       cursor: pointer;
-      font-size: 1.2rem;
-      color: #007bff;
+      font-size: 1.3rem;
+      color: #666;
       user-select: none;
     }
-    .buttons-container {
-      margin-top: 10px;
+    .buttons-row {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
     }
-    button {
-      cursor: pointer;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: none;
+    button.check-btn, button.generate-btn, button.copy-btn {
       background-color: #007bff;
+      border: none;
       color: white;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      flex: 1 1 120px;
+      min-width: 120px;
       transition: background-color 0.3s;
     }
-    button:hover {
-      background-color: #0059b3;
+    button.check-btn:hover, button.generate-btn:hover, button.copy-btn:hover {
+      background-color: #0056b3;
     }
     .feedback {
-      margin-top: 12px;
-      font-weight: 600;
-      font-size: 1rem;
       text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      min-height: 28px;
+      margin-bottom: 40px;
       user-select: none;
     }
     .feedback.strong {
@@ -204,11 +203,41 @@
     .feedback.weak {
       color: red;
     }
+
+    /* Feature section from your included HTML */
+    .feature-section {
+      text-align: center;
+      margin-top: 60px;
+    }
+    .feature-section h1 {
+      font-weight: 700;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      color: #003366;
+    }
+    .feature {
+      margin-bottom: 40px;
+    }
+    .icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .feature h2 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #004080;
+    }
+    .feature p {
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #555;
+    }
   </style>
-
-  <!-- FontAwesome for eye icon -->
+  <!-- For eye icon, use FontAwesome CDN -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
   <header>
@@ -224,16 +253,44 @@
     <h1>Check your password strength</h1>
     <p>ShieldPass securely stores, manages, and shares your sensitive data from passwords to passkeys and credit cards with privacy and ease.</p>
 
-    <div id="password-container">
-      <input type="password" id="password-input" placeholder="Enter your password" />
-      <i id="eye-icon" class="fas fa-eye eye-icon"></i>
-      <div class="buttons-container">
-        <button id="check-btn">Check Strength</button>
-        <button id="generate-btn">Generate Password</button>
-        <button id="copy-btn">Copy</button>
-      </div>
-      <div id="result" class="feedback"></div>
+    <!-- Password input + eye icon -->
+    <div class="password-container">
+      <input type="password" id="password-input" placeholder="Enter your password" autocomplete="off" />
+      <i id="eye-icon" class="fas fa-eye eye-icon" title="Show/Hide Password"></i>
     </div>
+
+    <!-- Buttons -->
+    <div class="buttons-row">
+      <button class="check-btn" id="check-btn">Check Strength</button>
+      <button class="generate-btn" id="generate-btn">Generate Password</button>
+      <button class="copy-btn" id="copy-btn">Copy Password</button>
+    </div>
+
+    <!-- Feedback message -->
+    <div id="result" class="feedback"></div>
+
+    <!-- Your password manager features section -->
+    <section class="feature-section">
+      <h1>Everything you need in a password manager</h1>
+
+      <div class="feature">
+        <div class="icon">⚡️</div>
+        <h2>Easy</h2>
+        <p>Powerful security in minutes<br />Do more, secure more, and collaborate more! The Bitwarden Password Manager is fast and easy to set up for both individuals and businesses.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">🔗</div>
+        <h2>Convenient</h2>
+        <p>Unlimited passwords, unlimited devices<br />Cross platform access for mobile, browser, and desktop apps. Supported in over 50 languages.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">🔒</div>
+        <h2>Secure</h2>
+        <p>Protect what's important to you<br />From family TV streaming logins to bank accounts, trust Bitwarden to securely generate, autofill, and protect your digital life.</p>
+      </div>
+    </section>
   </main>
 
   <section id="about-page">
@@ -276,10 +333,10 @@
 
   <script>
     const passwordInput = document.getElementById('password-input');
+    const eyeIcon = document.getElementById('eye-icon');
     const checkBtn = document.getElementById('check-btn');
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
-    const eyeIcon = document.getElementById('eye-icon');
     const result = document.getElementById('result');
 
     function isStrongPassword(pwd) {
@@ -321,11 +378,7 @@
     };
 
     copyBtn.onclick = () => {
-      if (!passwordInput.value) {
-        result.textContent = "Nothing to copy!";
-        result.className = "feedback weak";
-        return;
-      }
+      if (!passwordInput.value) return;
       navigator.clipboard.writeText(passwordInput.value).then(() => {
         result.textContent = "Copied to clipboard!";
         result.className = "feedback strong";
@@ -338,7 +391,6 @@
       eyeIcon.className = isPwd ? "fas fa-eye-slash eye-icon" : "fas fa-eye eye-icon";
     };
 
-    // Dark mode toggle and page show/hide functions
     function toggleMode() {
       const body = document.body;
       const toggle = document.getElementById('mode-toggle');
